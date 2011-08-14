@@ -34,6 +34,11 @@ public class Triangulation {
         if(contains(p))
             return false;
         
+        // Avoid intersections
+        for(Edge2D edge: eList)
+            if(edge.intersects(p))
+                return false;
+        
         // Process outside cycle to avoid cycle/mod exception
         Triangle2D bound = null;
         for(Triangle2D at: tList){
@@ -66,6 +71,16 @@ public class Triangulation {
         pList.add(p);
         return true;
     }
+    public void legalize(Edge2D e){
+        LinkedList<Triangle2D> nei = getTrianglesWithEdge(e);
+    }
+    public LinkedList<Triangle2D> getTrianglesWithEdge(Edge2D e){
+        LinkedList<Triangle2D> tor = new LinkedList<Triangle2D>();
+        for(Triangle2D t: tList)
+            if(t.contains(e))
+                tor.add(t);
+        return tor;
+    } 
     public Triangle2D relatedTriangle(Edge2D b, Edge2D n0, Edge2D n1, Edge2D n2){
         if(b.shareWith(n0))
             if(b.shareWith(n1))
