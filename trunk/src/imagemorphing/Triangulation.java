@@ -14,6 +14,8 @@ public class Triangulation {
     private LinkedList<Vector2D> pList;
     private LinkedList<Edge2D> eList;
     private LinkedList<Triangle2D> tList;
+// Debug
+//  public LinkedList<Circle2D> circles;    
     public Triangulation(Vector2D a, Vector2D b, Vector2D c){
         pList = new LinkedList<Vector2D>();
         eList = new LinkedList<Edge2D>();
@@ -28,9 +30,13 @@ public class Triangulation {
                 eList.get(0),
                 eList.get(1),
                 eList.get(2)));
-        circles = new LinkedList<Circle2D>();
+// Debug
+//        circles = new LinkedList<Circle2D>();
     }
-    public LinkedList<Circle2D> circles;
+    public Vector2D[] getStartingPoints(){
+        Vector2D[] tor = {pList.get(0), pList.get(1), pList.get(2)};
+        return tor;
+    }
     public boolean addPoint(Vector2D p){
         // If triangulation already contains point
         if(contains(p))
@@ -63,11 +69,12 @@ public class Triangulation {
         tList.add(relatedTriangle(edges[0], up, vp, wp));
         tList.add(relatedTriangle(edges[1], up, vp, wp));
         tList.add(relatedTriangle(edges[2], up, vp, wp));
-        
-        circles = new LinkedList<Circle2D>();
-        circles.add(tList.get(tList.size() - 1).getCirCircle());
-        circles.add(tList.get(tList.size() - 2).getCirCircle());
-        circles.add(tList.get(tList.size() - 3).getCirCircle());
+
+// Debug
+//        circles = new LinkedList<Circle2D>();
+//        circles.add(tList.get(tList.size() - 1).getCirCircle());
+//        circles.add(tList.get(tList.size() - 2).getCirCircle());
+//        circles.add(tList.get(tList.size() - 3).getCirCircle());
         
         // Add new Edges
         eList.add(up);

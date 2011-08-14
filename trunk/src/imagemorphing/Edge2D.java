@@ -48,7 +48,9 @@ public class Edge2D {
                 e.dest() == org() || 
                 e.dest() == dest();
     }
-    
+    public boolean contains(Vector2D p){
+        return p == o || p == d;
+    }
     @Override
     public String toString(){
         return "[" + o.toString() + d.toString() + "]";
