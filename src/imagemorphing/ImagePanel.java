@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import javax.media.jai.*;
 import java.awt.image.*;
 import java.awt.Color;
+import java.awt.geom.AffineTransform;
 
 // Events
 import java.awt.event.ActionEvent;
@@ -31,8 +32,8 @@ import java.awt.event.MouseMotionListener;
  * @author Samuel
  */
 public class ImagePanel extends JPanel implements MouseListener{
-    private static final int M_WIDTH = 300;
-    private static final int M_HEIGHT = 300;
+    private static final int M_WIDTH = 600;
+    private static final int M_HEIGHT = 600;
     private static final int POINT_DIM = 1;
     private static final Color POINT_COLOR = Color.red;
     private static final Color EDGE_COLOR = Color.orange;
@@ -40,24 +41,28 @@ public class ImagePanel extends JPanel implements MouseListener{
     //private RenderedImage image;
     private Triangulation triangulation;
     
-    // Debug
-    private static final int CENTER_FACTOR = 10;
+    private RenderedImage sourceImage;
+    
+// Debug
+//    private static final int CENTER_FACTOR = 10;
     
     public ImagePanel(String imageFile){
-        /*triangulation = new Triangulation(
+        sourceImage = JAI.create("fileload", imageFile);
+        triangulation = new Triangulation(
                 new Vector2D(-1.0, -1.0*M_HEIGHT),
                 new Vector2D(-1.0, M_HEIGHT + 1.0),
-                new Vector2D(2.0*M_WIDTH, M_HEIGHT + 1.0));*/
+                new Vector2D(2.0*M_WIDTH, M_HEIGHT + 1.0));
         
-        triangulation = new Triangulation(
-                new Vector2D(CENTER_FACTOR, CENTER_FACTOR),
-                new Vector2D(CENTER_FACTOR, M_HEIGHT - CENTER_FACTOR),
-                new Vector2D(M_WIDTH - CENTER_FACTOR, M_HEIGHT - CENTER_FACTOR));
-        
+// Debug
+//      triangulation = new Triangulation(
+//                new Vector2D(CENTER_FACTOR, CENTER_FACTOR),
+//                new Vector2D(CENTER_FACTOR, M_HEIGHT - CENTER_FACTOR),
+//                new Vector2D(M_WIDTH - CENTER_FACTOR, M_HEIGHT - CENTER_FACTOR));
         addMouseListener(this);
         setOpaque(true);
     }
     private void drawPoint(Graphics g, Vector2D p){
+        
         int x = (int)p.getCoord(0);
         int y = (int)p.getCoord(1);
         Color prevCol = g.getColor();
@@ -77,30 +82,44 @@ public class ImagePanel extends JPanel implements MouseListener{
                 (int)e.dest().getCoord(1));
         g.setColor(prevCol);
     }
-    private void drawCircle(Graphics g, Circle2D circle){
-        Vector2D c = circle.getCenter();
-        double r = circle.getRadious();
-        Color prevCol = g.getColor();
-        g.setColor(CIRCLE_COLOR);
-        g.drawOval(
-                (int)(c.getCoord(0) - r), 
-                (int)(c.getCoord(1) - r), 
-                (int)(2*r), 
-                (int)(2*r));
-        g.setColor(prevCol);
-    }
+// Debug
+//    private void drawCircle(Graphics g, Circle2D circle){
+//        Vector2D c = circle.getCenter();
+//        double r = circle.getRadious();
+//        Color prevCol = g.getColor();
+//        g.setColor(CIRCLE_COLOR);
+//        g.drawOval(
+//                (int)(c.getCoord(0) - r), 
+//                (int)(c.getCoord(1) - r), 
+//                (int)(2*r), 
+//                (int)(2*r));
+//        g.setColor(prevCol);
+//    }
     private void drawTriangulation(Graphics g, Triangulation t){
-        for (Circle2D circle:t.circles)
-            drawCircle(g, circle);
-        for(Edge2D edge: t.getEdgeList())
-            drawEdge(g, edge);
-        for(Vector2D point: t.getPointCloud())
-            drawPoint(g, point);
+        Vector2D[] startingPoints = t.getStartingPoints();
+//        for (Circle2D circle:t.circles)
+//            drawCircle(g, circle);
+        for(Edge2D edge: t.getEdgeList()){
+            if(!(
+                    edge.contains(startingPoints[0]) ||
+                    edge.contains(startingPoints[1]) ||
+                    edge.contains(startingPoints[2])))
+                drawEdge(g, edge);
+        }
+        for(Vector2D point: t.getPointCloud()){
+            if(!(
+                    point == startingPoints[0] ||
+                    point == startingPoints[1] ||
+                    point == startingPoints[2]))
+                drawPoint(g, point);
+        }
+            
     }
     @Override
     public void paint(Graphics g){
         g.setColor(Color.white);
         g.fillRect(0, 0, 2*M_WIDTH, 2*M_HEIGHT);
+        ((Graphics2D)g).drawRenderedImage(sourceImage, new AffineTransform());
         drawTriangulation(g, triangulation);
     }
     private void manageNewPoint(Vector2D p){
