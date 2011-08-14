@@ -41,36 +41,69 @@ public class Triangle2D {
             tor += ed.toString() + " ";
         return "< " + tor + ">";
     }
+    public Circle2D getCirCircle(){
+        Vector2D[] vex = getVertexes();
+        double a0, a1, c0, c1, det, asq, csq, ctr0, ctr1, rad2;
+        a0 = vex[0].getCoord(0) - vex[1].getCoord(0);
+        a1 = vex[0].getCoord(1) - vex[1].getCoord(1);
+        c0 = vex[2].getCoord(0) - vex[1].getCoord(0);
+        c1 = vex[2].getCoord(1) - vex[1].getCoord(1);
+        det = a0*c1 - c0*a1;
+        if(det == 0.0)
+            throw new UnsupportedOperationException("Colineal edges detected.");
+        det = 0.5/det;
+        asq = a0*a0 + a1*a1;
+        csq = c0*c0 + c1*c1;
+        ctr0 = det*(asq*c1 - csq*a1);
+        ctr1 = det*(csq*a0 - asq*c0);
+        rad2 = ctr0*ctr0 + ctr1*ctr1;
+        return new Circle2D(new Vector2D(ctr0 + vex[1].getCoord(0), ctr1 + vex[1].getCoord(1)), Math.sqrt(rad2));
+    }
     public boolean inDealunayCircle(Vector2D dp){
-        Vector2D[] vertexes = getVertexes();
-        double 
-                a = vertexes[0].getCoord(0), 
-                b = vertexes[0].getCoord(1), 
-                c = a*a + b*b, 
-                d = vertexes[1].getCoord(0), 
-                e = vertexes[1].getCoord(1), 
-                f = d*d + e*e,
-                g = vertexes[2].getCoord(0), 
-                h = vertexes[2].getCoord(1), 
-                i = g*g + h*h,
-                j = dp.getCoord(0), 
-                k = dp.getCoord(1), 
-                l = j*j + k*k;
-                
-        double determinant = 
-                a*e*i - a*e*l - a*f*h + a*f*k + a*h*l - 
-                a*i*k - b*d*i + b*d*l + b*f*g - b*f*j - 
-                b*g*l + b*i*j + c*d*h - c*d*k - c*e*g + 
-                c*e*j + c*g*k - c*h*j - d*h*l + d*i*k + 
-                e*g*l - e*i*j - f*g*k + f*h*j;
-        
-        return determinant > 0;
+        Circle2D cc = getCirCircle();
+        double radd = 
+                Math.pow(dp.getCoord(0) - cc.getCenter().getCoord(0), 2.0) +
+                Math.pow(dp.getCoord(1) - cc.getCenter().getCoord(1), 2.0);
+        double disc = Math.pow(cc.getRadious(), 2.0) - radd;
+        if(disc == 0)
+            throw new UnsupportedOperationException("Cocircular vertexes detected.");
+        return disc > 0.0;
     }
     public boolean contains(Edge2D e){
         for(Edge2D ed: edges)
             if(e == ed)
                 return true;
         return false;
+    }
+    public boolean contains(Vector2D p){
+        for(Vector2D pa: getVertexes())
+            if(pa == p)
+                return true;
+        return false;
+    }
+    public Vector2D not(Edge2D e){
+        for(Edge2D ea: edges)
+            if(ea != e){
+                if(ea.org() != e.org() && ea.org() != e.dest())
+                    return ea.org();
+                else
+                    return ea.dest();
+            }
+        return null;
+    }
+    public Edge2D touchesOrg(Edge2D e){
+        for(Edge2D ea: edges)
+            if(ea != e)
+                if(ea.org() == e.org() || ea.dest() == e.org())
+                    return ea;
+        return null;
+    }
+    public Edge2D touchesDest(Edge2D e){
+        for(Edge2D ea: edges)
+            if(ea != e)
+                if(ea.org() == e.dest() || ea.dest() == e.dest())
+                    return ea;
+        return null;
     }
     /*@Override
     public int hashCode() {

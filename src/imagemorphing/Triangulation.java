@@ -28,7 +28,9 @@ public class Triangulation {
                 eList.get(0),
                 eList.get(1),
                 eList.get(2)));
+        circles = new LinkedList<Circle2D>();
     }
+    public LinkedList<Circle2D> circles;
     public boolean addPoint(Vector2D p){
         // If triangulation already contains point
         if(contains(p))
@@ -62,6 +64,11 @@ public class Triangulation {
         tList.add(relatedTriangle(edges[1], up, vp, wp));
         tList.add(relatedTriangle(edges[2], up, vp, wp));
         
+        circles = new LinkedList<Circle2D>();
+        circles.add(tList.get(tList.size() - 1).getCirCircle());
+        circles.add(tList.get(tList.size() - 2).getCirCircle());
+        circles.add(tList.get(tList.size() - 3).getCirCircle());
+        
         // Add new Edges
         eList.add(up);
         eList.add(vp);
@@ -69,10 +76,55 @@ public class Triangulation {
         
         // Add new point
         pList.add(p);
+        
+        // Legalize new triangulation
+        for(Edge2D edge: edges)
+            legalize(edge, p);
+        
         return true;
     }
-    public void legalize(Edge2D e){
-        LinkedList<Triangle2D> nei = getTrianglesWithEdge(e);
+    public void legalize(Edge2D e, Vector2D p){
+        LinkedList<Triangle2D> t_nei = getTrianglesWithEdge(e);
+        if(t_nei.size() == 2){
+            Triangle2D actual = null;
+            Triangle2D next = null;
+            if(t_nei.get(0).contains(p)){
+                actual = t_nei.get(0);
+                next = t_nei.get(1);
+            }
+            else{
+                actual = t_nei.get(1);
+                next = t_nei.get(0);
+            }
+            Vector2D z = next.not(e);
+            if(actual.inDealunayCircle(z)){
+                tList.remove(actual);
+                tList.remove(next);
+                eList.remove(e);
+                
+                // New Edge
+                Edge2D nu = new Edge2D(p, z);
+                eList.add(nu);
+                
+                // First new Triangle Construction
+                tList.add(new Triangle2D(
+                        actual.touchesOrg(e), 
+                        next.touchesOrg(e),
+                        nu));
+                
+                // Second new Triangle Construction
+                tList.add(new Triangle2D(
+                        actual.touchesDest(e), 
+                        next.touchesDest(e),
+                        nu));
+                
+                // Recursive step
+                for(Edge2D ea: next.getEdges())
+                    if(ea != e)
+                        legalize(ea, p);
+                
+            }
+        }
     }
     public LinkedList<Triangle2D> getTrianglesWithEdge(Edge2D e){
         LinkedList<Triangle2D> tor = new LinkedList<Triangle2D>();
