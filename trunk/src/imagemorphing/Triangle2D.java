@@ -66,6 +66,12 @@ public class Triangle2D {
         
         return determinant > 0;
     }
+    public boolean contains(Edge2D e){
+        for(Edge2D ed: edges)
+            if(e == ed)
+                return true;
+        return false;
+    }
     /*@Override
     public int hashCode() {
         int hash = 7;
