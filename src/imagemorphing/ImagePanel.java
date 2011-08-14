@@ -24,56 +24,32 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 // Logics
-import java.util.LinkedList;
+
 
 /**
  *
  * @author Samuel
  */
 public class ImagePanel extends JPanel implements MouseListener{
+    private static final int M_WIDTH = 300;
+    private static final int M_HEIGHT = 300;
     private static final int POINT_DIM = 1;
     private static final Color POINT_COLOR = Color.red;
     private static final Color EDGE_COLOR = Color.orange;
-    private RenderedImage image;
-    private LinkedList<Point2D> pointCloud;
-    private LinkedList<Edge2D> edgeList;
-    private LinkedList<Triangle2D> triangulation;
+    //private RenderedImage image;
+    private Triangulation triangulation;
+    
     public ImagePanel(String imageFile){
-        pointCloud = new LinkedList<Point2D>();
-        edgeList = new LinkedList<Edge2D>();
-        triangulation = new LinkedList<Triangle2D>();
+        triangulation = new Triangulation(
+                new Vector2D(-1.0, -1.0*M_HEIGHT),
+                new Vector2D(-1.0, M_HEIGHT + 1.0),
+                new Vector2D(2.0*M_WIDTH, M_HEIGHT + 1.0));
         addMouseListener(this);
         setOpaque(true);
     }
-    private void drawTriangle(Graphics g, Triangle2D t){
-        Color prevCol = g.getColor();
-        g.setColor(EDGE_COLOR);
-        int[] xs = {
-            t.getVertex(0).getX(), 
-            t.getVertex(1).getX(), 
-            t.getVertex(2).getX(), 
-            t.getVertex(0).getX()};
-        int[] ys = {
-            t.getVertex(0).getY(), 
-            t.getVertex(1).getY(), 
-            t.getVertex(2).getY(), 
-            t.getVertex(0).getY()};
-        g.drawPolyline(xs, ys, 4);
-        g.setColor(prevCol);
-    }
-    private void drawEdge(Graphics g, Edge2D e){
-        Color prevCol = g.getColor();
-        g.setColor(EDGE_COLOR);
-        g.drawLine(
-                e.getA().getX(), 
-                e.getA().getY(), 
-                e.getB().getX(), 
-                e.getB().getY());
-        g.setColor(prevCol);
-    }
-    private void drawPoint(Graphics g, Point2D p){
-        int x = p.getX();
-        int y = p.getY();
+    private void drawPoint(Graphics g, Vector2D p){
+        int x = (int)p.getCoord(0);
+        int y = (int)p.getCoord(1);
         Color prevCol = g.getColor();
         g.setColor(POINT_COLOR);
         for(int i = x - POINT_DIM; i <= x + POINT_DIM; i++)
@@ -81,33 +57,36 @@ public class ImagePanel extends JPanel implements MouseListener{
                 g.drawLine(i, j, i, j);
         g.setColor(prevCol);
     }
+    private void drawEdge(Graphics g, Edge2D e){
+        Color prevCol = g.getColor();
+        g.setColor(EDGE_COLOR);
+        g.drawLine(
+                (int)e.org().getCoord(0), 
+                (int)e.org().getCoord(1), 
+                (int)e.dest().getCoord(0), 
+                (int)e.dest().getCoord(1));
+        g.setColor(prevCol);
+    }
+    private void drawTriangulation(Graphics g, Triangulation t){
+        for(Edge2D edge: t.getEdgeList())
+            drawEdge(g, edge);
+        for(Vector2D point: t.getPointCloud())
+            drawPoint(g, point);
+        /*
+         for (Edge2D edge: edgeList)
+            drawEdge(g, edge);
+        for(Vector2D point: pointCloud)
+            drawPoint(g, point);
+         */
+    }
     @Override
     public void paint(Graphics g){
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        for (Edge2D edge: edgeList)
-            drawEdge(g, edge);
-        for(Point2D point: pointCloud)
-            drawPoint(g, point);
+        drawTriangulation(g, triangulation);
     }
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(300, 300);
-    }
-    @Override
-    public void mouseReleased(MouseEvent me) {
-        manageNewPoint(new Point2D(me.getX(), me.getY()));
-        repaint();
-    }
-    private boolean registeredPoint(Point2D p){
-        for(Point2D t: pointCloud)
-            if(p.compareTo(t) == 0)
-                return true;
-        return false;
-    }
-    private void manageNewPoint(Point2D p){
-        if(registeredPoint(p))
-            return;
-        switch (pointCloud.size()){
+    private void manageNewPoint(Vector2D p){
+        triangulation.addPoint(p);
+        /*switch (pointCloud.size()){
             case 0: break;
             case 1:
                 edgeList.add(new Edge2D(pointCloud.get(0), p));
@@ -128,7 +107,18 @@ public class ImagePanel extends JPanel implements MouseListener{
                 }
                 break;
         }
-        pointCloud.add(p);   
+        pointCloud.add(p);
+         * 
+         */
+    }
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(M_WIDTH, M_HEIGHT);
+    }
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        manageNewPoint(new Vector2D(me.getX(), me.getY()));
+        repaint();
     }
     @Override
     public void mouseClicked(MouseEvent me) {}
@@ -137,5 +127,25 @@ public class ImagePanel extends JPanel implements MouseListener{
     @Override
     public void mouseEntered(MouseEvent me) {}
     @Override
-    public void mouseExited(MouseEvent me) {}   
+    public void mouseExited(MouseEvent me) {} 
+    /*private void drawTriangle(Graphics g, Triangle2D t){
+        Color prevCol = g.getColor();
+        g.setColor(EDGE_COLOR);
+        int[] xs = {
+            t.getVertex(0).getX(), 
+            t.getVertex(1).getX(), 
+            t.getVertex(2).getX(), 
+            t.getVertex(0).getX()};
+        int[] ys = {
+            t.getVertex(0).getY(), 
+            t.getVertex(1).getY(), 
+            t.getVertex(2).getY(), 
+            t.getVertex(0).getY()};
+        g.drawPolyline(xs, ys, 4);
+        g.setColor(prevCol);
+    }
+    
+     * 
+     */
+      
 }
