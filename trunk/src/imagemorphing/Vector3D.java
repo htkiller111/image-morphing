@@ -15,11 +15,9 @@ public class Vector3D extends Vector{
         coords[1] = ny;
         coords[2] = nz;
     }
-    @Override
-    public Vector3D sub(Vector b){
-        if(b instanceof Vector3D)
-            return (Vector3D)super.sub(b);
-        throw new UnsupportedOperationException("Cannot operate " + b);
+    public Vector3D sub(Vector3D b){
+        Vector res = super.sub(b);
+        return new Vector3D(res.getCoord(0), res.getCoord(1), res.getCoord(2));
     }
     public Vector3D cross(Vector3D q){
         return new Vector3D(

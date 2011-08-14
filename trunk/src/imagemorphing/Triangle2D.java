@@ -4,6 +4,8 @@
  */
 package imagemorphing;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Samuel
@@ -15,6 +17,9 @@ public class Triangle2D {
         edges[0] = e0;
         edges[1] = e1;
         edges[2] = e2;
+    }
+    public Edge2D[] getEdges(){
+        return edges;
     }
     public Edge2D getEdge(int i){
         if(i >=0 && i < edges.length)
@@ -36,23 +41,23 @@ public class Triangle2D {
             tor += ed.toString() + " ";
         return "< " + tor + ">";
     }
-    /*
     public boolean inDealunayCircle(Vector2D dp){
-        int 
-                a = vertex[0].getX(), 
-                b = vertex[0].getY(), 
+        Vector2D[] vertexes = getVertexes();
+        double 
+                a = vertexes[0].getCoord(0), 
+                b = vertexes[0].getCoord(1), 
                 c = a*a + b*b, 
-                d = vertex[1].getX(), 
-                e = vertex[1].getY(), 
+                d = vertexes[1].getCoord(0), 
+                e = vertexes[1].getCoord(1), 
                 f = d*d + e*e,
-                g = vertex[2].getX(), 
-                h = vertex[2].getY(), 
+                g = vertexes[2].getCoord(0), 
+                h = vertexes[2].getCoord(1), 
                 i = g*g + h*h,
-                j = dp.getX(), 
-                k = dp.getY(), 
+                j = dp.getCoord(0), 
+                k = dp.getCoord(1), 
                 l = j*j + k*k;
                 
-        int determinant = 
+        double determinant = 
                 a*e*i - a*e*l - a*f*h + a*f*k + a*h*l - 
                 a*i*k - b*d*i + b*d*l + b*f*g - b*f*j - 
                 b*g*l + b*i*j + c*d*h - c*d*k - c*e*g + 
@@ -61,6 +66,15 @@ public class Triangle2D {
         
         return determinant > 0;
     }
-     * 
-     */
+    /*@Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Arrays.deepHashCode(this.edges);
+        return hash;
+    }*/
+    public boolean equals(Object o){
+        if(o instanceof Triangle2D)
+            return this == o;
+        return false;
+    }
 }
