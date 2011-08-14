@@ -9,61 +9,35 @@ package imagemorphing;
  * @author Samuel
  */
 public class Triangle2D {
-    private Point2D[] vertex;
-    
-    private boolean alreadyGotVertex(Point2D v){
-        for(int i = 0; i < vertex.length; i++)
-            if(v.compareTo(vertex[i]) == 0)
-                return true;
-        return false;
-    }
+    private Edge2D[] edges;
     public Triangle2D(Edge2D e0, Edge2D e1, Edge2D e2){
-        int i = 0;
-        vertex = new Point2D[3];
-        if(!alreadyGotVertex(e0.getA()))
-            vertex[i++] = e0.getA();
-        if(!alreadyGotVertex(e0.getB()))
-            vertex[i++] = e0.getB();
-        if(!alreadyGotVertex(e1.getA()))
-            vertex[i++] = e1.getA();
-        if(!alreadyGotVertex(e1.getB()))
-            vertex[i++] = e1.getB();
-        if(!alreadyGotVertex(e2.getA()))
-            vertex[i++] = e2.getA();
-        if(!alreadyGotVertex(e2.getB()))
-            vertex[i++] = e2.getB();
+        edges = new Edge2D[3];
+        edges[0] = e0;
+        edges[1] = e1;
+        edges[2] = e2;
     }
-//    public Triangle2D(Point2D v0, Point2D v1, Point2D v2){
-//        vertex = new Point2D[3];
-//        vertex[0] = v0;
-//        vertex[1] = v1;
-//        vertex[2] = v2;
-//    }
-    public Point2D getVertex(int i){
-        if (testIndex(i))
-            return vertex[i];
-        return null;
+    public Edge2D getEdge(int i){
+        if(i >=0 && i < edges.length)
+            return edges[i];
+        throw new UnsupportedOperationException("Edge index out of range " + i);
     }
-    private boolean testIndex(int i){
-        return i >= 0 && i < vertex.length;
-    }
-    public void setVertex(int i, Point2D p){
-        if (testIndex(i))
-            vertex[i] = p;
+    public Vector2D[] getVertexes(){
+        Vector2D[] tor = {edges[0].org(), edges[0].dest(), null};
+        if(tor[0] == edges[2].org() || tor[1] == edges[2].org())
+            tor[2] = edges[2].dest();
         else
-            throw new UnsupportedOperationException("Invalid vertex index");
-    }
-    public int length(){
-        return vertex.length;
+            tor[2] = edges[2].org();
+        return tor;
     }
     @Override
     public String toString(){
         String tor = "";
-        for (int i = 0; i < vertex.length; i++)
-            tor += vertex[i].toString();
-        return tor;
+        for (Edge2D ed: edges)
+            tor += ed.toString() + " ";
+        return "< " + tor + ">";
     }
-    public boolean inDealunayCircle(Point2D dp){
+    /*
+    public boolean inDealunayCircle(Vector2D dp){
         int 
                 a = vertex[0].getX(), 
                 b = vertex[0].getY(), 
@@ -87,4 +61,6 @@ public class Triangle2D {
         
         return determinant > 0;
     }
+     * 
+     */
 }
