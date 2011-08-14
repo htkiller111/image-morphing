@@ -5,7 +5,6 @@
 package imagemorphing;
 
 import javax.swing.JFrame;
-import java.awt.Dimension;
 /**
  *
  * @author Samuel
@@ -22,7 +21,7 @@ public class ImageMorphing {
         window.add(new ImagePanel("megusta.jpg"));
         window.pack();
         window.setVisible(true);
-        window.setResizable(false);
+        //window.setResizable(false);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     }

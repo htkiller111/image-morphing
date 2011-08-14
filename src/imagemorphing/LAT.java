@@ -14,7 +14,7 @@ public class LAT {
         Vector3D cp2 = b.sub(a).cross(p2.sub(a));
         return cp1.dot(cp2) >= 0;
     }
-    public boolean pointInTriangle(Vector2D v, Triangle2D t){
+    public static boolean pointInTriangle(Vector2D v, Triangle2D t){
         Vector3D p = new Vector3D(v.getCoord(0), v.getCoord(1), 0);
         Vector2D[] vertexes = t.getVertexes();
         Vector3D a = new Vector3D(

@@ -30,10 +30,50 @@ public class Triangulation {
                 eList.get(2)));
     }
     public boolean addPoint(Vector2D p){
+        // If triangulation already contains point
         if(contains(p))
             return false;
+        
+        // Process outside cycle to avoid cycle/mod exception
+        Triangle2D bound = null;
+        for(Triangle2D at: tList){
+            if(LAT.pointInTriangle(p, at)){
+                bound = at;
+                break;
+            }
+        }
+        
+        // Remove container triangle
+        tList.remove(bound);
+        Vector2D[] vertexes = bound.getVertexes();
+        Edge2D 
+                up = new Edge2D(vertexes[0], p),
+                vp = new Edge2D(vertexes[1], p),
+                wp = new Edge2D(vertexes[2], p);
+        Edge2D[] edges = bound.getEdges();
+        
+        // Add new triangles
+        tList.add(relatedTriangle(edges[0], up, vp, wp));
+        tList.add(relatedTriangle(edges[1], up, vp, wp));
+        tList.add(relatedTriangle(edges[2], up, vp, wp));
+        
+        // Add new Edges
+        eList.add(up);
+        eList.add(vp);
+        eList.add(wp);
+        
+        // Add new point
         pList.add(p);
         return true;
+    }
+    public Triangle2D relatedTriangle(Edge2D b, Edge2D n0, Edge2D n1, Edge2D n2){
+        if(b.shareWith(n0))
+            if(b.shareWith(n1))
+                return new Triangle2D(b, n0, n1);
+            else
+                return new Triangle2D(b, n0, n2);
+        else
+            return new Triangle2D(b, n1, n2);
     }
     public boolean contains(Vector2D p){
         for(Vector2D a: pList)

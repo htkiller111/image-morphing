@@ -72,12 +72,6 @@ public class ImagePanel extends JPanel implements MouseListener{
             drawEdge(g, edge);
         for(Vector2D point: t.getPointCloud())
             drawPoint(g, point);
-        /*
-         for (Edge2D edge: edgeList)
-            drawEdge(g, edge);
-        for(Vector2D point: pointCloud)
-            drawPoint(g, point);
-         */
     }
     @Override
     public void paint(Graphics g){
@@ -86,30 +80,6 @@ public class ImagePanel extends JPanel implements MouseListener{
     }
     private void manageNewPoint(Vector2D p){
         triangulation.addPoint(p);
-        /*switch (pointCloud.size()){
-            case 0: break;
-            case 1:
-                edgeList.add(new Edge2D(pointCloud.get(0), p));
-                break;
-            case 2:
-                edgeList.add(new Edge2D(pointCloud.get(0), p));
-                edgeList.add(new Edge2D(pointCloud.get(1), p));
-                triangulation.add(new Triangle2D(
-                        edgeList.get(0), 
-                        edgeList.get(1), 
-                        edgeList.get(2)));
-                break;
-            default:
-                for (Triangle2D triangle: triangulation){
-                    if (p.insideOf(triangle)){
-                        
-                    }
-                }
-                break;
-        }
-        pointCloud.add(p);
-         * 
-         */
     }
     @Override
     public Dimension getPreferredSize() {
@@ -128,24 +98,4 @@ public class ImagePanel extends JPanel implements MouseListener{
     public void mouseEntered(MouseEvent me) {}
     @Override
     public void mouseExited(MouseEvent me) {} 
-    /*private void drawTriangle(Graphics g, Triangle2D t){
-        Color prevCol = g.getColor();
-        g.setColor(EDGE_COLOR);
-        int[] xs = {
-            t.getVertex(0).getX(), 
-            t.getVertex(1).getX(), 
-            t.getVertex(2).getX(), 
-            t.getVertex(0).getX()};
-        int[] ys = {
-            t.getVertex(0).getY(), 
-            t.getVertex(1).getY(), 
-            t.getVertex(2).getY(), 
-            t.getVertex(0).getY()};
-        g.drawPolyline(xs, ys, 4);
-        g.setColor(prevCol);
-    }
-    
-     * 
-     */
-      
 }
