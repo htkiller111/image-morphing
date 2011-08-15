@@ -18,6 +18,7 @@ import java.awt.geom.AffineTransform;
 // Events
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 // Logics
 import java.util.HashMap;
@@ -27,7 +28,7 @@ import java.util.LinkedList;
  *
  * @author Samuel
  */
-public class EditMeshPanel extends JPanel implements MouseListener{
+public class EditMeshPanel extends JPanel implements MouseListener, MouseMotionListener{
     private int M_WIDTH, M_HEIGHT;
     private static final int POINT_DIM = 1;
     private static final Color POINT_COLOR = Color.red;
@@ -36,12 +37,14 @@ public class EditMeshPanel extends JPanel implements MouseListener{
     private RenderedImage sourceImage;
     private BufferedImage buffer;
     private BufferedImage sourceBuffer;
+    private Vector2D movingPoint;
     public EditMeshPanel(){
         resetPanel();
     }
     public final void resetPanel(){
         M_WIDTH = 425;
         M_HEIGHT = 400;
+        movingPoint = null;
         triangulation = new Triangulation(
                 new Vector2D(-1.0, -1.0*M_HEIGHT),
                 new Vector2D(-1.0, M_HEIGHT + 1.0),
@@ -61,6 +64,7 @@ public class EditMeshPanel extends JPanel implements MouseListener{
                 new AffineTransform());
         
         addMouseListener(this);
+        addMouseMotionListener(this);
         setOpaque(true);
         repaint();
     }
@@ -122,15 +126,37 @@ public class EditMeshPanel extends JPanel implements MouseListener{
         drawTriangulation(bg, triangulation);
         g.drawImage(buffer, 0, 0, this);
     }
+    public void putTriangulation(Triangulation t){
+        triangulation.rebuildFrom(t); 
+        repaint();
+    }
+    @Override
+    public void mousePressed(MouseEvent me) {
+        int x = me.getX(), y = me.getY();
+        for(Vector2D p : triangulation.getPointCloud()){
+            if(p.compareTo(new Vector2D(x, y)) == 0)
+                movingPoint = p;
+        }
+    }
+    @Override
+    public void mouseDragged(MouseEvent me) {
+        int x = me.getX(), y = me.getY();
+        if(movingPoint != null){
+            movingPoint.setCoord(0, x);
+            movingPoint.setCoord(1, y);
+            repaint();
+        }    
+    }
     @Override
     public void mouseReleased(MouseEvent me) {
+        movingPoint = null;
     }
     @Override
     public void mouseClicked(MouseEvent me) {}
     @Override
-    public void mousePressed(MouseEvent me) {}
-    @Override
     public void mouseEntered(MouseEvent me) {}
     @Override
-    public void mouseExited(MouseEvent me) {} 
+    public void mouseExited(MouseEvent me) {}
+    @Override
+    public void mouseMoved(MouseEvent me) {}
 }
