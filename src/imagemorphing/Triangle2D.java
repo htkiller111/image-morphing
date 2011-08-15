@@ -105,6 +105,21 @@ public class Triangle2D {
                     return ea;
         return null;
     }
+    public int[] minimumSuroundingBox(){
+        Vector2D[] vex = getVertexes();
+        int[] box = {Integer.MAX_VALUE, Integer.MAX_VALUE, -1, -1};
+        for(Vector2D vertex: vex){
+            if(vertex.getCoord(0) < box[0])
+                box[0] = (int)vertex.getCoord(0);
+            if(vertex.getCoord(0) > box[2])
+                box[2] = (int)vertex.getCoord(0);
+            if(vertex.getCoord(1) < box[1])
+                box[1] = (int)vertex.getCoord(1);
+            if(vertex.getCoord(1) > box[3])
+                box[3] = (int)vertex.getCoord(1);
+        }
+        return box;
+    }
     /*@Override
     public int hashCode() {
         int hash = 7;
