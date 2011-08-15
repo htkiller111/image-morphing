@@ -124,17 +124,14 @@ public class LAT {
             Triangle2D t){
         double[] result = new double[2];
         Vector2D[] vex = t.getVertexes();
-        double 
-                x1 = vex[0].getCoord(0),
-                y1 = vex[0].getCoord(1),
-                x2 = vex[1].getCoord(0),
-                y2 = vex[1].getCoord(1),
-                x3 = vex[2].getCoord(0),
-                y3 = vex[2].getCoord(1);
-        
-        result[0] = u*x1 + v*x2 + w*x3;
-        result[1] = u*y1 + v*y2 + w*y3;
-        
+        result[0] = 
+                u*vex[0].getCoord(0) +
+                v*vex[1].getCoord(0) + 
+                w*vex[2].getCoord(0);
+        result[1] = 
+                u*vex[0].getCoord(1) + 
+                v*vex[1].getCoord(1) + 
+                w*vex[2].getCoord(1);
         return result;
     }
 }

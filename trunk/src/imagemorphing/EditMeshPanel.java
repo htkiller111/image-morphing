@@ -27,7 +27,7 @@ import java.util.LinkedList;
  *
  * @author Samuel
  */
-public class ImagePanel extends JPanel implements MouseListener{
+public class EditMeshPanel extends JPanel implements MouseListener{
     private int M_WIDTH, M_HEIGHT;
     private static final int POINT_DIM = 1;
     private static final Color POINT_COLOR = Color.red;
@@ -36,8 +36,7 @@ public class ImagePanel extends JPanel implements MouseListener{
     private RenderedImage sourceImage;
     private BufferedImage buffer;
     private BufferedImage sourceBuffer;
-    private EditMeshPanel destination;
-    public ImagePanel(){
+    public EditMeshPanel(){
         resetPanel();
     }
     public final void resetPanel(){
@@ -47,7 +46,6 @@ public class ImagePanel extends JPanel implements MouseListener{
                 new Vector2D(-1.0, -1.0*M_HEIGHT),
                 new Vector2D(-1.0, M_HEIGHT + 1.0),
                 new Vector2D(2.0*M_WIDTH, M_HEIGHT + 1.0));
-        
         buffer = new BufferedImage(
                 M_WIDTH, 
                 M_HEIGHT, 
@@ -61,16 +59,12 @@ public class ImagePanel extends JPanel implements MouseListener{
         ((Graphics2D)sourceBuffer.getGraphics()).drawRenderedImage(
                 sourceImage, 
                 new AffineTransform());
-        destination = new EditMeshPanel();
+        
         addMouseListener(this);
         setOpaque(true);
         repaint();
     }
-    public void setDestinationPanel(EditMeshPanel d){
-        destination = d;
-    }
     private void drawPoint(Graphics g, Vector2D p){
-        
         int x = (int)p.getCoord(0);
         int y = (int)p.getCoord(1);
         Color prevCol = g.getColor();
@@ -128,33 +122,8 @@ public class ImagePanel extends JPanel implements MouseListener{
         drawTriangulation(bg, triangulation);
         g.drawImage(buffer, 0, 0, this);
     }
-    private void mapTexture(Graphics g, Triangle2D s, Triangle2D d){
-        int i_argb = 0;
-        int xo, xf;
-        double[] barycentric_d = new double[3];
-        double[] cartesian_s = new double[2];
-        HashMap<Integer, LinkedList<Integer>> levels = 
-                LAT.levels(d);
-        for(Integer level: levels.keySet()){
-            xo = levels.get(level).get(0);
-            xf = levels.get(level).get(1);
-            for(int x = xo; x <= xf; x++){
-                barycentric_d = LAT.getBarycentricCoords(x, level, d);
-                cartesian_s = LAT.restoreBarycentricCoords(
-                        barycentric_d[0],
-                        barycentric_d[1],
-                        barycentric_d[2],
-                        s);
-                i_argb = sourceBuffer.getRGB((int)cartesian_s[0], (int)cartesian_s[1]);
-                g.setColor(new Color(i_argb));
-                g.drawLine(x, level, x, level);
-            }
-        }
-    }
     @Override
     public void mouseReleased(MouseEvent me) {
-        triangulation.addPoint(new Vector2D(me.getX(), me.getY()));
-        repaint();
     }
     @Override
     public void mouseClicked(MouseEvent me) {}
