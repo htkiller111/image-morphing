@@ -154,6 +154,7 @@ public class ImagePanel extends JPanel implements MouseListener{
     @Override
     public void mouseReleased(MouseEvent me) {
         triangulation.addPoint(new Vector2D(me.getX(), me.getY()));
+        destination.putTriangulation(triangulation);
         repaint();
     }
     @Override

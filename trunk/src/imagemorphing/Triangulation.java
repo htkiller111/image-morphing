@@ -14,9 +14,11 @@ public class Triangulation {
     private LinkedList<Vector2D> pList;
     private LinkedList<Edge2D> eList;
     private LinkedList<Triangle2D> tList;
+    private int idPointCorrelative;
 // Debug
 //  public LinkedList<Circle2D> circles;    
     public Triangulation(Vector2D a, Vector2D b, Vector2D c){
+        idPointCorrelative = 0;
         pList = new LinkedList<Vector2D>();
         eList = new LinkedList<Edge2D>();
         tList = new LinkedList<Triangle2D>();
@@ -70,18 +72,14 @@ public class Triangulation {
         tList.add(relatedTriangle(edges[1], up, vp, wp));
         tList.add(relatedTriangle(edges[2], up, vp, wp));
 
-// Debug
-//        circles = new LinkedList<Circle2D>();
-//        circles.add(tList.get(tList.size() - 1).getCirCircle());
-//        circles.add(tList.get(tList.size() - 2).getCirCircle());
-//        circles.add(tList.get(tList.size() - 3).getCirCircle());
-        
         // Add new Edges
         eList.add(up);
         eList.add(vp);
         eList.add(wp);
         
         // Add new point
+        p.setId(idPointCorrelative);
+        idPointCorrelative++;
         pList.add(p);
         
         // Legalize new triangulation
@@ -160,5 +158,51 @@ public class Triangulation {
     }
     public LinkedList<Vector2D> getPointCloud(){
         return pList;
+    }
+    public LinkedList<Triangle2D> getTriangleList(){
+        return tList;
+    }
+    public Vector2D getPointById(int id){
+        for(Vector2D p: pList)
+            if(p.getId() == id)
+                return p;
+        return null;
+    }
+    public void rebuildFrom(Triangulation t){
+        LinkedList<Vector2D> incomingPointCloud = t.getPointCloud();
+        LinkedList<Edge2D> incomingEdgeList = t.getEdgeList();
+        LinkedList<Triangle2D> incomingTriangleList = t.getTriangleList();
+        boolean foundPoint = false;
+        // Point reconstruction
+        for(Vector2D ipoint:incomingPointCloud){
+            foundPoint = false;
+            for(Vector2D mpoint: pList)
+                if(mpoint.getId() == ipoint.getId()){
+                    foundPoint = true;
+                    break;
+                }
+            if(!foundPoint){
+                Vector2D padd = new Vector2D(
+                        ipoint.getCoord(0), 
+                        ipoint.getCoord(1));
+                padd.setId(ipoint.getId());
+                pList.add(padd);
+            }
+        }
+        // Edge reconstruction
+        eList = new LinkedList<Edge2D>();
+        for(Edge2D ie: incomingEdgeList){
+            eList.add(new Edge2D(
+                    getPointById(ie.org().getId()),
+                    getPointById(ie.dest().getId())));
+        }
+        // Triangle reconstruction
+        tList = new LinkedList<Triangle2D>();
+        for(Triangle2D it: incomingTriangleList){
+            tList.add(new Triangle2D(
+                    eList.get(incomingEdgeList.indexOf(it.getEdge(0))),
+                    eList.get(incomingEdgeList.indexOf(it.getEdge(1))),
+                    eList.get(incomingEdgeList.indexOf(it.getEdge(2)))));
+        }
     }
 }

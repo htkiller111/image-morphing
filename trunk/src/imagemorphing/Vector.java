@@ -11,9 +11,17 @@ package imagemorphing;
 public class Vector implements Comparable{
     protected double[] coords;
     public static final int THRESHOLD = 3;
+    protected int id;
     
     public Vector(int dim){
         coords = new double[dim];
+        id = -1;
+    }
+    public void setId(int i){
+        id = i;
+    }
+    public int getId(){
+        return id;
     }
     protected boolean testIndex(int i){
         return (i >=0) && (i < coords.length);
