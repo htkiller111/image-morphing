@@ -109,8 +109,9 @@ private void morph(double c){
     TextureMapper.mixMapTexture(
             sBuffer, 
             sTriangulation, 
+            aTriangulation,
             dBuffer,
-            aTriangulation, 
+            dTriangulation, 
             drawingPanel.getDBufferGraphics(),
             c);
     drawingPanel.repaint();

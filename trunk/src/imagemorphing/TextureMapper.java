@@ -76,59 +76,76 @@ public class TextureMapper {
     public static void mixMapTriangleTexture(
             BufferedImage sourceBuffer, 
             Triangle2D sourceTriangle,
+            Triangle2D intermediateTriangle,
             BufferedImage destBuffer,
             Triangle2D destinationTriangle, 
             Graphics pencil,
             double degree){
         int i_argb = 0, i_argbd = 0;
         int xo, xf;
-        double[] barycentric_d = new double[3];
+        double[] barycentric_i = new double[3];
         double[] cartesian_s = new double[2];
+        double[] cartesian_d = new double[2];
         HashMap<Integer, LinkedList<Integer>> levels = 
-                LAT.levels(destinationTriangle);
+                LAT.levels(intermediateTriangle);
         for(Integer level: levels.keySet()){
             xo = levels.get(level).get(0);
             xf = levels.get(level).get(1);
             for(int x = xo; x <= xf; x++){
-                barycentric_d = LAT.getBarycentricCoords(
+                
+                barycentric_i = LAT.getBarycentricCoords(
                         x, 
                         level, 
-                        destinationTriangle);
+                        intermediateTriangle);
+                
+                // Map AB
                 cartesian_s = LAT.restoreBarycentricCoords(
-                        barycentric_d[0],
-                        barycentric_d[1],
-                        barycentric_d[2],
+                        barycentric_i[0],
+                        barycentric_i[1],
+                        barycentric_i[2],
                         sourceTriangle);
                 i_argb = sourceBuffer.getRGB(
                         (int)Math.abs(cartesian_s[0]), 
                         (int)Math.abs(cartesian_s[1]));
-               i_argbd = destBuffer.getRGB(
-                        (int)Math.abs(cartesian_s[0]), 
-                        (int)Math.abs(cartesian_s[1]));
-               pencil.setColor(mixColors(i_argb, i_argbd, degree));
-               pencil.drawLine(x, level, x, level);
+                
+                // Map BA
+                cartesian_d = LAT.restoreBarycentricCoords(
+                        barycentric_i[0],
+                        barycentric_i[1],
+                        barycentric_i[2],
+                        destinationTriangle);
+                i_argbd = destBuffer.getRGB(
+                        (int)Math.abs(cartesian_d[0]), 
+                        (int)Math.abs(cartesian_d[1]));
+                
+                // Mix
+                pencil.setColor(mixColors(i_argb, i_argbd, degree));
+                pencil.drawLine(x, level, x, level);
             }
         }
     }
     public static void mixMapTexture(
             BufferedImage sourceBuffer, 
             Triangulation sTriangulation,
+            Triangulation iTriangulation,
             BufferedImage destBuffer,
             Triangulation dTriangulation, 
             Graphics pencil,
             double degree){
-        Triangle2D st, dt;
+        Triangle2D st, it, dt;
         Vector2D[] stVex = sTriangulation.getStartingPoints();
-        for(int i = 0; i < dTriangulation.getTriangleList().size(); i++){
+        for(int i = 0; i < iTriangulation.getTriangleList().size(); i++){
             st = sTriangulation.getTriangleList().get(i);
             if(!(
                     st.contains(stVex[0]) || 
                     st.contains(stVex[1]) || 
                     st.contains(stVex[2]))){
+                it = iTriangulation.getTriangleList().get(i);
                 dt = dTriangulation.getTriangleList().get(i);
                 mixMapTriangleTexture(
                         sourceBuffer, 
-                        st, 
+                        st,
+                        it,
                         destBuffer, 
                         dt, 
                         pencil, 
