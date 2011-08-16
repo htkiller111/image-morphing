@@ -46,6 +46,7 @@ public class MorphingMainWindow extends JFrame {
         menuCredits = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Le Morphing");
         setResizable(false);
 
         sourcePanel.setMaximumSize(new java.awt.Dimension(500, 500));

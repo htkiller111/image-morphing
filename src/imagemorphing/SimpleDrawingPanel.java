@@ -17,7 +17,7 @@ import java.awt.Color;
  * @author Samuel
  */
 public class SimpleDrawingPanel extends JPanel{
-    private int M_WIDTH, M_HEIGHT;
+    public static int M_WIDTH, M_HEIGHT;
     private BufferedImage buffer;
     public SimpleDrawingPanel(){
         resetPanel();
