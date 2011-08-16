@@ -38,6 +38,9 @@ public class Triangulation {
                 eList.get(0),
                 eList.get(1),
                 eList.get(2)));
+        a.setId(idPointCorrelative++);
+        b.setId(idPointCorrelative++);
+        c.setId(idPointCorrelative++);
 // Debug
 //        circles = new LinkedList<Circle2D>();
     }
@@ -219,5 +222,23 @@ public class Triangulation {
             av.setCoord(0, (int)(av.getCoord(0) + c*subV.getCoord(0)));
             av.setCoord(1, (int)(av.getCoord(1) + c*subV.getCoord(1)));
         }
+    }
+    public double[] getMinimumBox(){
+        double[] result = {
+            Double.MAX_VALUE, 
+            Double.MAX_VALUE, 
+            Double.MIN_VALUE, 
+            Double.MIN_VALUE};
+        for(Vector2D p: pList.subList(3, pList.size())){
+            if(p.getCoord(0) < result[0])
+                result[0] = p.getCoord(0);
+            if(p.getCoord(1) < result[1])
+                result[1] = p.getCoord(1);
+            if(p.getCoord(0) > result[2])
+                result[2] = p.getCoord(0);
+            if(p.getCoord(1) > result[3])
+                result[3] = p.getCoord(1);
+        }
+        return result;
     }
 }

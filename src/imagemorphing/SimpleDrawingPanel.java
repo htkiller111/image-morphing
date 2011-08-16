@@ -23,7 +23,7 @@ public class SimpleDrawingPanel extends JPanel{
         resetPanel();
     }
     public final void resetPanel(){
-        M_WIDTH = 425;
+        M_WIDTH = 430;
         M_HEIGHT = 400;
         buffer = new BufferedImage(
                 M_WIDTH, 

@@ -22,7 +22,9 @@ public class TextureMapper {
             BufferedImage sourceBuffer, 
             Triangle2D sourceTriangle, 
             Triangle2D destinationTriangle, 
-            Graphics pencil){
+            Graphics pencil,
+            int xa,
+            int ya){
         int i_argb = 0;
         int xo, xf;
         double[] barycentric_d = new double[3];
@@ -46,7 +48,7 @@ public class TextureMapper {
                         (int)Math.abs(cartesian_s[0]), 
                         (int)Math.abs(cartesian_s[1]));
                 pencil.setColor(new Color(i_argb));
-                pencil.drawLine(x, level, x, level);
+                pencil.drawLine(x + xa, level + ya, x + xa, level + ya);
             }
         }
     }
@@ -55,6 +57,11 @@ public class TextureMapper {
             Triangulation sTriangulation, 
             Triangulation dTriangulation, 
             Graphics pencil){
+        double[] box = dTriangulation.getMinimumBox();
+        double W = box[2] - box[0], H = box[3] - box[1];
+        int 
+                xa = (int)(((SimpleDrawingPanel.M_WIDTH  - W) / 2.0) - box[0]),
+                ya = (int)(((SimpleDrawingPanel.M_HEIGHT - H) / 2.0) - box[1]);
         Triangle2D st, dt;
         Vector2D[] stVex = sTriangulation.getStartingPoints();
         for(int i = 0; i < dTriangulation.getTriangleList().size(); i++){
@@ -64,7 +71,7 @@ public class TextureMapper {
                     st.contains(stVex[1]) || 
                     st.contains(stVex[2]))){
                 dt = dTriangulation.getTriangleList().get(i);
-                mapTriangleTexture(sourceBuffer, st, dt, pencil);
+                mapTriangleTexture(sourceBuffer, st, dt, pencil, xa, ya);
             }
         }
     }
@@ -80,7 +87,9 @@ public class TextureMapper {
             BufferedImage destBuffer,
             Triangle2D destinationTriangle, 
             Graphics pencil,
-            double degree){
+            double degree,
+            int xa,
+            int ya){
         int i_argb = 0, i_argbd = 0;
         int xo, xf;
         double[] barycentric_i = new double[3];
@@ -120,7 +129,7 @@ public class TextureMapper {
                 
                 // Mix
                 pencil.setColor(mixColors(i_argb, i_argbd, degree));
-                pencil.drawLine(x, level, x, level);
+                pencil.drawLine(x + xa, level + ya, x + xa, level + ya);
             }
         }
     }
@@ -132,6 +141,11 @@ public class TextureMapper {
             Triangulation dTriangulation, 
             Graphics pencil,
             double degree){
+        double[] box = iTriangulation.getMinimumBox();
+        double W = box[2] - box[0], H = box[3] - box[1];
+        int 
+                xa = (int)(((SimpleDrawingPanel.M_WIDTH  - W) / 2.0) - box[0]),
+                ya = (int)(((SimpleDrawingPanel.M_HEIGHT - H) / 2.0) - box[1]);
         Triangle2D st, it, dt;
         Vector2D[] stVex = sTriangulation.getStartingPoints();
         for(int i = 0; i < iTriangulation.getTriangleList().size(); i++){
@@ -149,7 +163,9 @@ public class TextureMapper {
                         destBuffer, 
                         dt, 
                         pencil, 
-                        degree);
+                        degree,
+                        xa, 
+                        ya);
             }
         }
     }
