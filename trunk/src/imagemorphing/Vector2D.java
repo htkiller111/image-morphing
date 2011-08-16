@@ -38,7 +38,10 @@ public class Vector2D extends Vector implements Comparable{
             res += 2.0*Math.PI;
         return res < Math.PI;
     }
-    
+    public Vector2D sub(Vector2D b){
+        Vector res = super.sub(b);
+        return new Vector2D(res.getCoord(0), res.getCoord(1));
+    }
     /*public boolean insideOf(Triangle2D t){
         Point3D p = new Point3D(x, y, 0);
         Point3D a = new Point3D(

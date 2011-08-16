@@ -59,10 +59,7 @@ public class EditMeshPanel extends JPanel implements MouseListener, MouseMotionL
                 M_WIDTH, 
                 M_HEIGHT, 
                 BufferedImage.TYPE_INT_ARGB);
-        ((Graphics2D)sourceBuffer.getGraphics()).drawRenderedImage(
-                sourceImage, 
-                new AffineTransform());
-        
+        sourceImage = null;
         addMouseListener(this);
         addMouseMotionListener(this);
         setOpaque(true);
@@ -146,6 +143,15 @@ public class EditMeshPanel extends JPanel implements MouseListener, MouseMotionL
             movingPoint.setCoord(1, y);
             repaint();
         }    
+    }
+    public BufferedImage getSourceBuffer(){
+        return sourceBuffer;
+    }
+    public Graphics getDBufferGraphics(){
+        return buffer.getGraphics();
+    }
+    public Triangulation getTriangulation(){
+        return triangulation;
     }
     @Override
     public void mouseReleased(MouseEvent me) {

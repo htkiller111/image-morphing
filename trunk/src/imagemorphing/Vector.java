@@ -59,6 +59,13 @@ public class Vector implements Comparable{
         }
         return tor;
     }
+    public Vector mul(double c){
+        Vector tor = new Vector(coords.length);
+        for (int i = 0; i < coords.length; i++){
+            tor.setCoord(i, c*coords[i]);
+        }
+        return tor;
+    }
     public double getNorm(){
         return Math.sqrt(dot(this));
     }

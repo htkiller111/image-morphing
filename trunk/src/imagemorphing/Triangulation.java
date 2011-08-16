@@ -16,7 +16,13 @@ public class Triangulation {
     private LinkedList<Triangle2D> tList;
     private int idPointCorrelative;
 // Debug
-//  public LinkedList<Circle2D> circles;    
+//  public LinkedList<Circle2D> circles;  
+    public Triangulation(){
+        idPointCorrelative = 0;
+        pList = new LinkedList<Vector2D>();
+        eList = new LinkedList<Edge2D>();
+        tList = new LinkedList<Triangle2D>();
+    }
     public Triangulation(Vector2D a, Vector2D b, Vector2D c){
         idPointCorrelative = 0;
         pList = new LinkedList<Vector2D>();
@@ -203,6 +209,15 @@ public class Triangulation {
                     eList.get(incomingEdgeList.indexOf(it.getEdge(0))),
                     eList.get(incomingEdgeList.indexOf(it.getEdge(1))),
                     eList.get(incomingEdgeList.indexOf(it.getEdge(2)))));
+        }
+    }
+    public void shapeTo(Triangulation d, double c){
+        Vector2D av = null, subV = null;
+        for(Vector2D iv: d.getPointCloud()){
+            av = this.getPointById(iv.getId());
+            subV = iv.sub(av);
+            av.setCoord(0, (int)(av.getCoord(0) + c*subV.getCoord(0)));
+            av.setCoord(1, (int)(av.getCoord(1) + c*subV.getCoord(1)));
         }
     }
 }

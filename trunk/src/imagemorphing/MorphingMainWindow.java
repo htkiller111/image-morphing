@@ -193,6 +193,7 @@ public class MorphingMainWindow extends JFrame {
 private void menuNewMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuNewMouseReleased
     sourcePanel.resetPanel();
     destinationPanel.resetPanel();
+    sourcePanel.setDestinationPanel(destinationPanel);
 }//GEN-LAST:event_menuNewMouseReleased
 private void menuReloadSourceMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuReloadSourceMouseReleased
     loadSourceImage();
@@ -201,7 +202,16 @@ private void menuReloadDestinationMouseReleased(java.awt.event.MouseEvent evt) {
     loadDestinationImage();
 }//GEN-LAST:event_menuReloadDestinationMouseReleased
 private void setSourcePanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setSourcePanelActionPerformed
-
+    SingleAnimationForm aToB = new SingleAnimationForm(
+        sourcePanel.getSourceBuffer(),
+        sourcePanel.getTriangulation(),
+        destinationPanel.getTriangulation());
+    aToB.setTitle("Origin to Destination shape tween");
+    SingleAnimationForm bToA = new SingleAnimationForm(
+        destinationPanel.getSourceBuffer(),
+        destinationPanel.getTriangulation(),
+        sourcePanel.getTriangulation());
+    bToA.setTitle("Destination to Origin shape tween");
 }//GEN-LAST:event_setSourcePanelActionPerformed
 private void loadSourcePanelImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadSourcePanelImageActionPerformed
     loadSourceImage();
