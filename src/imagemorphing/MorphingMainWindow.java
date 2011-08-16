@@ -212,6 +212,12 @@ private void setSourcePanelActionPerformed(java.awt.event.ActionEvent evt) {//GE
         sourcePanel.getTriangulation(),
         destinationPanel.getTriangulation());
     aToB.setTitle("Origin to Destination shape tween");
+    ComplexAnimationForm fAToB = new ComplexAnimationForm(
+        sourcePanel.getSourceBuffer(),
+        sourcePanel.getTriangulation(),
+        destinationPanel.getSourceBuffer(),
+        destinationPanel.getTriangulation());
+    fAToB.setTitle("Origin to Destination full morph");
 }//GEN-LAST:event_setSourcePanelActionPerformed
 private void loadSourcePanelImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadSourcePanelImageActionPerformed
     loadSourceImage();
