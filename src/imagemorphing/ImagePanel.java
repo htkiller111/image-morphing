@@ -19,9 +19,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-// Logics
-import java.util.HashMap;
-import java.util.LinkedList;
 
 /**
  *
@@ -58,9 +55,7 @@ public class ImagePanel extends JPanel implements MouseListener{
                 M_WIDTH, 
                 M_HEIGHT, 
                 BufferedImage.TYPE_INT_ARGB);
-        ((Graphics2D)sourceBuffer.getGraphics()).drawRenderedImage(
-                sourceImage, 
-                new AffineTransform());
+        sourceImage = null;
         destination = new EditMeshPanel();
         addMouseListener(this);
         setOpaque(true);
@@ -128,34 +123,20 @@ public class ImagePanel extends JPanel implements MouseListener{
         drawTriangulation(bg, triangulation);
         g.drawImage(buffer, 0, 0, this);
     }
-    private void mapTexture(Graphics g, Triangle2D s, Triangle2D d){
-        int i_argb = 0;
-        int xo, xf;
-        double[] barycentric_d = new double[3];
-        double[] cartesian_s = new double[2];
-        HashMap<Integer, LinkedList<Integer>> levels = 
-                LAT.levels(d);
-        for(Integer level: levels.keySet()){
-            xo = levels.get(level).get(0);
-            xf = levels.get(level).get(1);
-            for(int x = xo; x <= xf; x++){
-                barycentric_d = LAT.getBarycentricCoords(x, level, d);
-                cartesian_s = LAT.restoreBarycentricCoords(
-                        barycentric_d[0],
-                        barycentric_d[1],
-                        barycentric_d[2],
-                        s);
-                i_argb = sourceBuffer.getRGB((int)cartesian_s[0], (int)cartesian_s[1]);
-                g.setColor(new Color(i_argb));
-                g.drawLine(x, level, x, level);
-            }
-        }
-    }
     @Override
     public void mouseReleased(MouseEvent me) {
         triangulation.addPoint(new Vector2D(me.getX(), me.getY()));
         destination.putTriangulation(triangulation);
         repaint();
+    }
+    public BufferedImage getSourceBuffer(){
+        return sourceBuffer;
+    }
+    public Graphics getDBufferGraphics(){
+        return buffer.getGraphics();
+    }
+    public Triangulation getTriangulation(){
+        return triangulation;
     }
     @Override
     public void mouseClicked(MouseEvent me) {}
