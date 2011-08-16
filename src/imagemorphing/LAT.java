@@ -77,7 +77,7 @@ public class LAT {
         }
         // if 3, 2 are the same (not-extreme vertex)
         if(result.size() == 3){
-            if(result.get(0) == result.get(1))
+            if(result.get(0).intValue() == result.get(1).intValue())
                 result.remove(0);
             else
                 result.remove(2);
