@@ -12,6 +12,7 @@ package imagemorphing;
 
 import javax.swing.JFrame;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -43,11 +44,9 @@ public class MorphingMainWindow extends JFrame {
         jMenu1 = new javax.swing.JMenu();
         menuNew = new javax.swing.JMenuItem();
         menuExport = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        menuReloadSource = new javax.swing.JMenuItem();
-        menuReloadDestination = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuFunctions = new javax.swing.JMenuItem();
         menuCredits = new javax.swing.JMenuItem();
@@ -111,59 +110,43 @@ public class MorphingMainWindow extends JFrame {
 
         menuNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         menuNew.setText("New");
-        menuNew.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                menuNewMouseReleased(evt);
+        menuNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuNewActionPerformed(evt);
             }
         });
         jMenu1.add(menuNew);
 
         menuExport.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         menuExport.setText("Export");
-        menuExport.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                menuExportMouseReleased(evt);
+        menuExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuExportActionPerformed(evt);
             }
         });
         jMenu1.add(menuExport);
 
-        jMenuItem1.setText("Export Mesh");
-        jMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem1MouseReleased(evt);
-            }
-        });
-        jMenu1.add(jMenuItem1);
-
-        jMenuItem2.setText("Import Mesh");
-        jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jMenuItem2MouseReleased(evt);
-            }
-        });
-        jMenu1.add(jMenuItem2);
-
         jMenuBar1.add(jMenu1);
 
-        jMenu3.setText("Edit");
+        jMenu3.setText("Mesh");
 
-        menuReloadSource.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        menuReloadSource.setText("(re)Load source Image");
-        menuReloadSource.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                menuReloadSourceMouseReleased(evt);
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Export Mesh");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu3.add(menuReloadSource);
+        jMenu3.add(jMenuItem1);
 
-        menuReloadDestination.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
-        menuReloadDestination.setText("(re)Load destination Image");
-        menuReloadDestination.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                menuReloadDestinationMouseReleased(evt);
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Import Mesh");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu3.add(menuReloadDestination);
+        jMenu3.add(jMenuItem2);
 
         jMenuBar1.add(jMenu3);
 
@@ -171,10 +154,20 @@ public class MorphingMainWindow extends JFrame {
 
         menuFunctions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         menuFunctions.setText("Functions");
+        menuFunctions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuFunctionsActionPerformed(evt);
+            }
+        });
         jMenu2.add(menuFunctions);
 
         menuCredits.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         menuCredits.setText("Credits");
+        menuCredits.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCreditsActionPerformed(evt);
+            }
+        });
         jMenu2.add(menuCredits);
 
         jMenuBar1.add(jMenu2);
@@ -219,17 +212,6 @@ public class MorphingMainWindow extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void menuNewMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuNewMouseReleased
-    sourcePanel.resetPanel();
-    destinationPanel.resetPanel();
-    sourcePanel.setDestinationPanel(destinationPanel);
-}//GEN-LAST:event_menuNewMouseReleased
-private void menuReloadSourceMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuReloadSourceMouseReleased
-    loadSourceImage();
-}//GEN-LAST:event_menuReloadSourceMouseReleased
-private void menuReloadDestinationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuReloadDestinationMouseReleased
-    loadDestinationImage();
-}//GEN-LAST:event_menuReloadDestinationMouseReleased
 private void setSourcePanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setSourcePanelActionPerformed
     //VideoExporter.exportVideo(null, "laprueba");
     SingleAnimationForm bToA = new SingleAnimationForm(
@@ -260,25 +242,42 @@ private void jMenu1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
     
 }//GEN-LAST:event_jMenu1MouseReleased
 
-private void menuExportMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuExportMouseReleased
+private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    loadMesh();
+    sourcePanel.repaint();
+    destinationPanel.repaint();
+}//GEN-LAST:event_jMenuItem2ActionPerformed
+
+private void menuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNewActionPerformed
+    sourcePanel.resetPanel();
+    destinationPanel.resetPanel();
+    sourcePanel.setDestinationPanel(destinationPanel);
+}//GEN-LAST:event_menuNewActionPerformed
+
+private void menuExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExportActionPerformed
     VideoExporter ve = new VideoExporter(
             sourcePanel.getSourceBuffer(),
             sourcePanel.getTriangulation(),
             destinationPanel.getSourceBuffer(),
             destinationPanel.getTriangulation());
     ve.export();
-}//GEN-LAST:event_menuExportMouseReleased
+}//GEN-LAST:event_menuExportActionPerformed
 
-private void jMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseReleased
+private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
     saveMesh();
-}//GEN-LAST:event_jMenuItem1MouseReleased
+}//GEN-LAST:event_jMenuItem1ActionPerformed
 
-private void jMenuItem2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseReleased
-// TODO add your handling code here:
-    loadMesh();
-    sourcePanel.repaint();
-    destinationPanel.repaint();
-}//GEN-LAST:event_jMenuItem2MouseReleased
+private void menuFunctionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFunctionsActionPerformed
+    HelpForm hf = new HelpForm();
+}//GEN-LAST:event_menuFunctionsActionPerformed
+
+private void menuCreditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCreditsActionPerformed
+    JOptionPane.showMessageDialog(this, 
+            "Constructed by Samuel Chavez (cha07351@uvg.edu.gt) under " +
+            "GNU GPL v2 Code License. August 2011.", 
+            "Credits",
+            JOptionPane.INFORMATION_MESSAGE);
+}//GEN-LAST:event_menuCreditsActionPerformed
 private void saveMesh(){
     JFileChooser chooser = new JFileChooser("Select mesh filename:");
     MeshFileFilter filter = new MeshFileFilter();
@@ -376,8 +375,6 @@ private void loadDestinationImage(){
     private javax.swing.JMenuItem menuExport;
     private javax.swing.JMenuItem menuFunctions;
     private javax.swing.JMenuItem menuNew;
-    private javax.swing.JMenuItem menuReloadDestination;
-    private javax.swing.JMenuItem menuReloadSource;
     private javax.swing.JButton setSourcePanel;
     private imagemorphing.ImagePanel sourcePanel;
     // End of variables declaration//GEN-END:variables

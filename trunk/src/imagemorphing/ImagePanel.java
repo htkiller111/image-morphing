@@ -18,13 +18,14 @@ import java.awt.geom.AffineTransform;
 // Events
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 
 /**
  *
  * @author Samuel
  */
-public class ImagePanel extends JPanel implements MouseListener{
+public class ImagePanel extends JPanel implements MouseListener, MouseMotionListener{
     private int M_WIDTH, M_HEIGHT;
     private static final int POINT_DIM = 1;
     private static final Color POINT_COLOR = Color.red;
@@ -34,6 +35,7 @@ public class ImagePanel extends JPanel implements MouseListener{
     private BufferedImage buffer;
     private BufferedImage sourceBuffer;
     private EditMeshPanel destination;
+    private Vector2D movingPoint;
     public ImagePanel(){
         resetPanel();
     }
@@ -43,6 +45,7 @@ public class ImagePanel extends JPanel implements MouseListener{
     public final void resetPanel(){
         M_WIDTH = 425;
         M_HEIGHT = 400;
+        movingPoint = null;
         triangulation = new Triangulation(
                 new Vector2D(-1.0, -1.0*M_HEIGHT),
                 new Vector2D(-1.0, M_HEIGHT + 1.0),
@@ -61,6 +64,7 @@ public class ImagePanel extends JPanel implements MouseListener{
         sourceImage = null;
         destination = new EditMeshPanel();
         addMouseListener(this);
+        addMouseMotionListener(this);
         setOpaque(true);
         repaint();
     }
@@ -132,9 +136,14 @@ public class ImagePanel extends JPanel implements MouseListener{
     @Override
     public void mouseReleased(MouseEvent me) {
         if(inBounds(me.getX(), me.getY())){
-            triangulation.addPoint(new Vector2D(me.getX(), me.getY()));
-            destination.putTriangulation(triangulation);
-            repaint();
+            if(me.getButton() == MouseEvent.BUTTON3){
+                triangulation.addPoint(new Vector2D(me.getX(), me.getY()));
+                destination.putTriangulation(triangulation);
+                repaint();
+            }
+            else{
+                movingPoint = null;
+            }
         }
     }
     public BufferedImage getSourceBuffer(){
@@ -149,9 +158,30 @@ public class ImagePanel extends JPanel implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent me) {}
     @Override
-    public void mousePressed(MouseEvent me) {}
+    public void mousePressed(MouseEvent me) {
+        if(me.getButton() == MouseEvent.BUTTON1){
+            int x = me.getX(), y = me.getY();
+            for(Vector2D p : triangulation.getPointCloud()){
+                if(p.compareTo(new Vector2D(x, y)) == 0)
+                    movingPoint = p;
+            }
+        }
+    }
     @Override
     public void mouseEntered(MouseEvent me) {}
     @Override
-    public void mouseExited(MouseEvent me) {} 
+    public void mouseExited(MouseEvent me) {}
+
+    @Override
+    public void mouseDragged(MouseEvent me) {
+        int x = me.getX(), y = me.getY();
+        if(movingPoint != null){
+            movingPoint.setCoord(0, x);
+            movingPoint.setCoord(1, y);
+            repaint();
+        } 
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent me) {}
 }

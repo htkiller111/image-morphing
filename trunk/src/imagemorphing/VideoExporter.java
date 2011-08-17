@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
  * @author Samuel
  */
 public class VideoExporter {
-    private static final int FRAMES = 30;
+    private static final int FRAMES = 90;
     private static final String IMG_EXT = "jpg";
     private static final String EXPORT_URL = "VideoExporter/exporter.exe";
     private static final String EXPORT_PATH = "VideoExporter/";
