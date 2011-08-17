@@ -19,7 +19,9 @@ import javax.swing.JFileChooser;
  * @author Samuel
  */
 public class MorphingMainWindow extends JFrame {
-
+    
+    private static final String MESH_EXT = "msh";
+    
     /** Creates new form MorphingMainWindow */
     public MorphingMainWindow() {
         initComponents();
@@ -41,6 +43,8 @@ public class MorphingMainWindow extends JFrame {
         jMenu1 = new javax.swing.JMenu();
         menuNew = new javax.swing.JMenuItem();
         menuExport = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         menuReloadSource = new javax.swing.JMenuItem();
         menuReloadDestination = new javax.swing.JMenuItem();
@@ -122,6 +126,22 @@ public class MorphingMainWindow extends JFrame {
             }
         });
         jMenu1.add(menuExport);
+
+        jMenuItem1.setText("Export Mesh");
+        jMenuItem1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenuItem1MouseReleased(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setText("Import Mesh");
+        jMenuItem2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jMenuItem2MouseReleased(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
 
         jMenuBar1.add(jMenu1);
 
@@ -248,6 +268,47 @@ private void menuExportMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST
             destinationPanel.getTriangulation());
     ve.export();
 }//GEN-LAST:event_menuExportMouseReleased
+
+private void jMenuItem1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseReleased
+    saveMesh();
+}//GEN-LAST:event_jMenuItem1MouseReleased
+
+private void jMenuItem2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem2MouseReleased
+// TODO add your handling code here:
+    loadMesh();
+    sourcePanel.repaint();
+    destinationPanel.repaint();
+}//GEN-LAST:event_jMenuItem2MouseReleased
+private void saveMesh(){
+    JFileChooser chooser = new JFileChooser("Select mesh filename:");
+    MeshFileFilter filter = new MeshFileFilter();
+    chooser.setFileFilter(filter);
+    int returnVal = chooser.showOpenDialog(this);
+    if(returnVal == JFileChooser.APPROVE_OPTION){
+        String fname = chooser.getSelectedFile().getAbsolutePath();
+        MeshFileIO.saveMesh(
+                sourcePanel.getTriangulation(), 
+             destinationPanel.getTriangulation(), 
+             fname + "." + MESH_EXT);
+    }
+}
+private void loadMesh(){
+    JFileChooser chooser = new JFileChooser("Select mesh filename:");
+    MeshFileFilter filter = new MeshFileFilter();
+    chooser.setFileFilter(filter);
+    int returnVal = chooser.showOpenDialog(this);
+    if(returnVal == JFileChooser.APPROVE_OPTION){
+        String fname = chooser.getSelectedFile().getAbsolutePath();
+        Triangulation[] read = MeshFileIO.loadMesh(fname);
+        if(read != null){
+            sourcePanel.setTriangulation(read[0]);
+            destinationPanel.setTriangulation(read[1]);
+        }
+        else
+            System.out.println("Invalid mesh file.");
+                  
+    }
+}
 private void loadSourceImage(){
     JFileChooser chooser = new JFileChooser();
     ImageFileFilter filter = new ImageFileFilter();
@@ -307,6 +368,8 @@ private void loadDestinationImage(){
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JButton loadSourcePanelImage;
     private javax.swing.JButton loadSourcePanelImage1;
     private javax.swing.JMenuItem menuCredits;

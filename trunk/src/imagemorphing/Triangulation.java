@@ -5,12 +5,12 @@
 package imagemorphing;
 
 import java.util.LinkedList;
-
+import java.io.Serializable;
 /**
  *
  * @author Samuel
  */
-public class Triangulation {
+public class Triangulation implements Serializable{
     private LinkedList<Vector2D> pList;
     private LinkedList<Edge2D> eList;
     private LinkedList<Triangle2D> tList;

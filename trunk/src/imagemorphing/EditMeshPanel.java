@@ -41,6 +41,9 @@ public class EditMeshPanel extends JPanel implements MouseListener, MouseMotionL
     public EditMeshPanel(){
         resetPanel();
     }
+    public void setTriangulation(Triangulation t){
+        triangulation = t;
+    }
     public final void resetPanel(){
         M_WIDTH = 425;
         M_HEIGHT = 400;

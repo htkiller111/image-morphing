@@ -4,13 +4,12 @@
  */
 package imagemorphing;
 
-import java.util.Arrays;
-
+import java.io.Serializable;
 /**
  *
  * @author Samuel
  */
-public class Triangle2D {
+public class Triangle2D implements Serializable{
     private Edge2D[] edges;
     public Triangle2D(Edge2D e0, Edge2D e1, Edge2D e2){
         edges = new Edge2D[3];

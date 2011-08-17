@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 package imagemorphing;
-
+import java.io.Serializable;
 /**
  *
  * @author Samuel
  */
-public class Edge2D {
+public class Edge2D implements Serializable{
     private Vector2D o;
     private Vector2D d;
     public static final double THRESHOLD = 2.0;
