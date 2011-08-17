@@ -10,9 +10,9 @@
  */
 package imagemorphing;
 
-import java.awt.Component;
 import javax.swing.JFrame;
 import javax.swing.JFileChooser;
+
 
 /**
  *
@@ -24,6 +24,9 @@ public class MorphingMainWindow extends JFrame {
     public MorphingMainWindow() {
         initComponents();
         sourcePanel.setDestinationPanel(destinationPanel);
+//   PApplet.main(new String[] { "movie2" });
+        
+        
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -113,6 +116,11 @@ public class MorphingMainWindow extends JFrame {
 
         menuExport.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         menuExport.setText("Export");
+        menuExport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                menuExportMouseReleased(evt);
+            }
+        });
         jMenu1.add(menuExport);
 
         jMenuBar1.add(jMenu1);
@@ -203,6 +211,7 @@ private void menuReloadDestinationMouseReleased(java.awt.event.MouseEvent evt) {
     loadDestinationImage();
 }//GEN-LAST:event_menuReloadDestinationMouseReleased
 private void setSourcePanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setSourcePanelActionPerformed
+    //VideoExporter.exportVideo(null, "laprueba");
     SingleAnimationForm bToA = new SingleAnimationForm(
         destinationPanel.getSourceBuffer(),
         destinationPanel.getTriangulation(),
@@ -230,6 +239,15 @@ private void jMenu1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
 // TODO add your handling code here:
     
 }//GEN-LAST:event_jMenu1MouseReleased
+
+private void menuExportMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuExportMouseReleased
+    VideoExporter ve = new VideoExporter(
+            sourcePanel.getSourceBuffer(),
+            sourcePanel.getTriangulation(),
+            destinationPanel.getSourceBuffer(),
+            destinationPanel.getTriangulation());
+    ve.export();
+}//GEN-LAST:event_menuExportMouseReleased
 private void loadSourceImage(){
     JFileChooser chooser = new JFileChooser();
     ImageFileFilter filter = new ImageFileFilter();
