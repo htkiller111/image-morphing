@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 package imagemorphing;
-
+import java.io.Serializable;
 /**
  *
  * @author Samuel
  */
-public class Vector2D extends Vector implements Comparable{
+public class Vector2D extends Vector implements Comparable, Serializable{
     
     public Vector2D(double nx, double ny){
         super(2);

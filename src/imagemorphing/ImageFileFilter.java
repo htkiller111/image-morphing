@@ -13,7 +13,7 @@ import java.io.File;
  */
 public class ImageFileFilter extends FileFilter{
     private final String[] okFileExtensions = 
-    new String[] {"jpg", "png", "gif", "png"};
+    new String[] {"jpg", "gif", "png"};
     @Override
     public boolean accept(File file){
         int i = file.getName().lastIndexOf('.');
@@ -27,6 +27,6 @@ public class ImageFileFilter extends FileFilter{
     }
     @Override
     public String getDescription() {
-        return "*.jpg, *.png, *.bmp, *.gif";
+        return "*.jpg, *.bmp, *.gif";
     }
 }

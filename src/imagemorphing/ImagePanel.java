@@ -37,6 +37,9 @@ public class ImagePanel extends JPanel implements MouseListener{
     public ImagePanel(){
         resetPanel();
     }
+    public void setTriangulation(Triangulation t){
+        triangulation = t;
+    }
     public final void resetPanel(){
         M_WIDTH = 425;
         M_HEIGHT = 400;
@@ -123,11 +126,16 @@ public class ImagePanel extends JPanel implements MouseListener{
         drawTriangulation(bg, triangulation);
         g.drawImage(buffer, 0, 0, this);
     }
+    private boolean inBounds(int x, int y){
+        return (0 <= x && x <= M_WIDTH)&&(0 <= y && y <= M_HEIGHT);
+    }
     @Override
     public void mouseReleased(MouseEvent me) {
-        triangulation.addPoint(new Vector2D(me.getX(), me.getY()));
-        destination.putTriangulation(triangulation);
-        repaint();
+        if(inBounds(me.getX(), me.getY())){
+            triangulation.addPoint(new Vector2D(me.getX(), me.getY()));
+            destination.putTriangulation(triangulation);
+            repaint();
+        }
     }
     public BufferedImage getSourceBuffer(){
         return sourceBuffer;

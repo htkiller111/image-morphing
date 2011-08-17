@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 package imagemorphing;
-
+import java.io.Serializable;
 /**
  *
  * @author Samuel
  */
-public class Vector implements Comparable{
+public class Vector implements Comparable, Serializable{
     protected double[] coords;
     public static final int THRESHOLD = 3;
     protected int id;
