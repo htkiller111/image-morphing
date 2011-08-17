@@ -6,7 +6,7 @@ int index;
 
 void setup() {
   size(430, 400);
-  int numFrames = 30;
+  int numFrames = 90;
   imageFrames = new PImage[numFrames];
   for( int i = 0; i < imageFrames.length; i++ ){
     imageFrames[i] = loadImage( "f" + i + ".jpg" );
