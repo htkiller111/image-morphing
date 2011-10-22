@@ -255,12 +255,12 @@ private void menuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 }//GEN-LAST:event_menuNewActionPerformed
 
 private void menuExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExportActionPerformed
-    VideoExporter ve = new VideoExporter(
+    /*VideoExporter ve = new VideoExporter(
             sourcePanel.getSourceBuffer(),
             sourcePanel.getTriangulation(),
             destinationPanel.getSourceBuffer(),
             destinationPanel.getTriangulation());
-    ve.export();
+    ve.export();*/
 }//GEN-LAST:event_menuExportActionPerformed
 
 private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
