@@ -10,19 +10,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 // Image manipulation
-import javax.media.jai.*;
 import java.awt.image.*;
 import java.awt.Color;
-import java.awt.geom.AffineTransform;
 
 // Events
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
-// Logics
-import java.util.HashMap;
-import java.util.LinkedList;
 
 /**
  *
@@ -106,10 +100,8 @@ public class EditMeshPanel extends JPanel implements MouseListener, MouseMotionL
         }     
     }
     public void loadImage(String imageFile){
-        sourceImage = JAI.create("fileload", imageFile);
-        ((Graphics2D)sourceBuffer.getGraphics()).drawRenderedImage(
-                sourceImage, 
-                new AffineTransform());
+        try{sourceBuffer = javax.imageio.ImageIO.read(new java.io.File(imageFile));}
+        catch(Exception e){System.out.println("File not found "  + imageFile);}
         repaint();
     }
     @Override

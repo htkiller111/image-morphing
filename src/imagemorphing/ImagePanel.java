@@ -7,19 +7,15 @@ package imagemorphing;
 // Interface
 import javax.swing.JPanel;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 // Image manipulation
-import javax.media.jai.*;
 import java.awt.image.*;
 import java.awt.Color;
-import java.awt.geom.AffineTransform;
 
 // Events
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 
 /**
  *
@@ -110,10 +106,8 @@ public class ImagePanel extends JPanel implements MouseListener, MouseMotionList
         }     
     }
     public void loadImage(String imageFile){
-        sourceImage = JAI.create("fileload", imageFile);
-        ((Graphics2D)sourceBuffer.getGraphics()).drawRenderedImage(
-                sourceImage, 
-                new AffineTransform());
+        try{sourceBuffer = javax.imageio.ImageIO.read(new java.io.File(imageFile));}
+        catch(Exception e){System.out.println("File not found." + e  + imageFile);}
         repaint();
     }
     @Override
